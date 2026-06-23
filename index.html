@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Poké Unlock</title>
+  <!-- css l8r-->
+  <!-- <link rel="stylesheet" href="style.css" /> -->
+</head>
+<body>
+  <header>
+    <h1>Poké Unlock</h1>
+    <p>Click to catch Pokémon!</p>
+  </header>
+
+  <!-- button + counter-->
+  <main>
+    <button id="catchBtn">Catch Pokémon</button>
+    <p>Caught: <span id="counter">0</span></p>
+
+    <!-- Cards will be added here from api l8r -->
+    <section id="cards"></section>
+
+    <!--second button to unlock the box -->
+    <button id="unlockBtn">Open Box</button>
+  </main>
+
+  <!-- api/js here l8r -->
+  <!-- <script src="api.js"></script> -->
+
+  <script>
+    //adds to the pointer (counter)
+    let count = 0;
+    const counter = document.getElementById("counter");
+
+    document.getElementById("catchBtn").addEventListener("click", () => {
+      count++;
+      counter.textContent = count;
+    });
+  </script>
+
+</body>
+</html>
