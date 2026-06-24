@@ -28,7 +28,7 @@ def display_status():
 def on_click():
     state["points"] += 1
 
-# save game data to supabase
+# save game to supabase logic
 def save_state(user_id):
     client.table("game_state").update({
         "points": state["points"],
@@ -39,11 +39,12 @@ def save_state(user_id):
 
 def load_state(user_id):
     
-    # Send a request to Supabase to get the game state for the given user_id
+    # send a request to Supabase to get the game state for the given user_id
     response = client.table("game_state").select("*").eq("user_id", user_id).execute()
 
-    # Check for user data if not found create new user
+    # check for user data 
     if len(response.data) == 0:
+        # if not found create new user
         client.table("game_state").insert({
             "user_id": user_id, 
             "points": 0, 
@@ -64,6 +65,7 @@ def main():
     print("Enter your user ID:")
     user_id = input("> ").strip()
     
+    # load game function call
     load_state(user_id)
 
     print("\n")
@@ -85,7 +87,7 @@ def main():
                 print("You caught a Pokemon!")
             else:
                 print("Not enough points to catch a Pokemon.")
-    
+    # save game here when user quits the game
     save_state(user_id)
 
 
