@@ -31,19 +31,28 @@
     //adds to the pointer (counter)
     let count = 0;
     const counter = document.getElementById("counter");
-
     document.getElementById("clickBtn").addEventListener("click", () => {
       count++;
       counter.textContent = count;
-    });
-
-    document.getElementById("catchBtn").addEventListener("click", () => {
+  });
+    document.getElementById("catchBtn").addEventListener("click", async () => {
       if (count >= 10) {
         count -= 10;
         counter.textContent = count;
-        alert("You caught a Pokémon!");
+
+        const id = Math.floor(Math.random() * 151) + 1;
+        const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        const data = await res.json();
+
+        const card = document.createElement("div");
+        card.innerHTML = `
+          <img src="${data.sprites.front_default}" alt="${data.name}" />
+          <p>${data.name}</p>
+        `;
+        document.getElementById("cards").appendChild(card);
+
       } else {
-        alert("Not enough points to catch a Pokémon!");
+        alert("Not enough points!");
       }
     });
   </script>
