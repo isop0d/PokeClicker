@@ -68,8 +68,11 @@ def get_random_pokemon():
     if response.status_code == 200:
         data = response.json()
         pokemon_name = data["name"]
-        print(f"You caught {pokemon_name} !!")
-        state["pokemon"].append(pokemon_name)
+        if pokemon_name in state["pokemon"]:
+            get_random_pokemon()  # Try again if the Pokemon is already caught
+        else:
+            print(f"You caught {pokemon_name} !!")
+            state["pokemon"].append(pokemon_name)
 
 
 def main():
