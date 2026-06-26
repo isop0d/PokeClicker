@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 from supabase import create_client
+import requests
+import random
 
 load_dotenv()
 
@@ -59,6 +61,20 @@ def load_state(user_id):
         state["pokemon"] = user_data["pokemon"]
         print(f"Welcome back, {user_id}!")
 
+
+def get_random_pokemon():
+    pokemon_id = random.randint(1, 1025)
+    response = requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_id}")
+    if response.status_code == 200:
+        data = response.json()
+        pokemon_name = data["name"]
+        if pokemon_name in state["pokemon"]:
+            get_random_pokemon()  # Try again if the Pokemon is already caught
+        else:
+            print(f"You caught {pokemon_name} !!")
+            state["pokemon"].append(pokemon_name)
+
+
 def main():
 
 
@@ -72,6 +88,9 @@ def main():
     print("=== PokeClicker ===\n")
     print("Press Enter to click. Type 'q' to quit.\n")
     print("Press enter to earn points. Type 'catch' to catch a Pokemon (costs 50 points).")
+    print("Type 'pokedex' to view your caught Pokemon.\n")
+    print("Type 'q' to quit the game and save your progress.\n")
+
 
     while True:
         display_status()
@@ -84,9 +103,14 @@ def main():
         if user_input == "catch":
             if state["points"] >= 50:
                 state["points"] -= 50
-                print("You caught a Pokemon!")
+                get_random_pokemon()
             else:
                 print("Not enough points to catch a Pokemon.")
+        if user_input == "pokedex":
+            print("\n=== Pokedex ===")
+            for i, pokemon in enumerate(state["pokemon"], start=1):
+                print(f"{i}. {pokemon}")
+
     # save game here when user quits the game
     save_state(user_id)
 
